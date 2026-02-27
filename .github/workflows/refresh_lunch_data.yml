@@ -25,6 +25,22 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Check secrets are set
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_COOKIE: ${{ secrets.SLACK_COOKIE }}
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+        run: |
+          if [ -z "$SLACK_TOKEN" ] && [ -z "$SLACK_COOKIE" ]; then
+            echo "::error::Add either SLACK_TOKEN or SLACK_COOKIE in repo Settings → Secrets and variables → Actions (names must match exactly)"
+            exit 1
+          fi
+          if [ -z "$CHANNEL_ID" ]; then
+            echo "::error::Add CHANNEL_ID in repo Settings → Secrets and variables → Actions (name must match exactly)"
+            exit 1
+          fi
+          echo "Secrets present (CHANNEL_ID length: ${#CHANNEL_ID})"
+
       - name: Run lunch data export
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}

@@ -24,6 +24,10 @@ def main():
         print("No lunch data returned.")
         sys.exit(1)
 
+    # Remove non-JSON-serializable keys (e.g. date_obj) before writing
+    for row in data:
+        row.pop("date_obj", None)
+
     os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w") as f:
         json.dump(data, f, indent=2)
