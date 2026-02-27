@@ -7,11 +7,19 @@ Writes data/lunch_data.json. Set SLACK_TOKEN (or SLACK_COOKIE) and CHANNEL_ID in
 import json
 import os
 import sys
+from datetime import datetime
 
 # Run from repo root so lunch_analyzer is importable
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from lunch_analyzer import analyze_lunches
+
+
+def json_serial(obj):
+    """Convert datetime and other non-JSON types for json.dump."""
+    if isinstance(obj, datetime):
+        return obj.strftime("%Y-%m-%d")
+    raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
 
 
 def main():
@@ -30,7 +38,7 @@ def main():
 
     os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, default=json_serial)
 
     print(f"Wrote {len(data)} lunches to {out_path}")
 
