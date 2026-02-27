@@ -1,0 +1,22 @@
+# Environment and secrets - never commit these
+.env
+.env.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+env/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE / OS
+.idea/
+.DS_Store
+*.swp
+*.swo
